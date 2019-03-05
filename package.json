@@ -2,19 +2,15 @@
   "name": "running",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@types/jest": "24.0.9",
-    "@types/node": "11.10.4",
-    "@types/react": "16.8.6",
-    "@types/react-dom": "16.8.2",
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3",
-    "react-scripts": "2.1.5",
-    "typescript": "3.3.3333"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "yarn start:app & yarn start:lambda",
+    "start:app": "yarn run watch:css & react-scripts start",
+    "start:lambda": "netlify-lambda serve src/lambda",
+    "build": "yarn build:app & yarn build:lambda",
+    "build:app": "react-scripts build",
+    "build:lambda": "netlify-lambda build src/lambda",
+    "build:css": "postcss src/styles/index.css -o src/index.css",
+    "watch:css": "postcss src/styles/index.css -o src/index.css -w",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -26,5 +22,32 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "@types/dotenv": "^6.1.0",
+    "@types/jest": "24.0.9",
+    "@types/moment": "^2.13.0",
+    "@types/react": "16.8.6",
+    "@types/react-dom": "16.8.2",
+    "@types/recharts": "^1.1.13",
+    "autoprefixer": "^9.4.9",
+    "axios": "^0.18.0",
+    "dotenv": "^6.2.0",
+    "moment": "^2.24.0",
+    "postcss-cli": "^6.1.2",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-scripts": "2.1.5",
+    "recharts": "^1.5.0",
+    "tailwindcss": "^0.7.4",
+    "typescript": "3.3.3333"
+  },
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/aws-lambda": "^8.10.20",
+    "babel-loader": "^8.0.5",
+    "http-proxy-middleware": "^0.19.1",
+    "netlify-lambda": "^1.4.2",
+    "react-testing-library": "^6.0.0"
+  }
 }
