@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "yarn start:app & yarn start:lambda",
+    "start": "yarn start:app && yarn start:lambda",
     "start:app": "yarn run watch:css & react-scripts start",
     "start:lambda": "netlify-lambda serve src/lambda",
-    "build": "yarn build:app & yarn build:lambda",
+    "build": "yarn build:app && yarn build:lambda",
     "build:app": "react-scripts build",
     "build:lambda": "netlify-lambda build src/lambda",
     "build:css": "postcss src/styles/index.css -o src/index.css",
