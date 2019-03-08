@@ -1,9 +1,8 @@
 import { Callback, Context, APIGatewayEvent } from "aws-lambda";
 import axios from "axios";
-import moment from "moment";
-import dotenv from "dotenv";
+import { config } from "dotenv";
 
-dotenv.config();
+config();
 
 const handler = async (
   event: APIGatewayEvent,
@@ -23,13 +22,13 @@ const handler = async (
 
     const accessToken = authResponse.data.access_token;
 
+    const startOfYear =
+      new Date(`${new Date().getFullYear()}-01-01`).getTime() / 1000;
     const response = await axios.get(
       "https://www.strava.com/api/v3/athlete/activities",
       {
         params: {
-          after: moment()
-            .startOf("year")
-            .unix()
+          after: startOfYear
         },
         headers: {
           Authorization: `Bearer ${accessToken}`

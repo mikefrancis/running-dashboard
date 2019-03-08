@@ -1,19 +1,32 @@
 import * as React from "react";
+import styled, { createGlobalStyle } from "styled-components";
+
 import DataFetcher from "./DataFetcher";
 import MonthlyBreakdown from "./MonthlyBreakdown";
 import OverallProgress from "./OverallProgress";
 
 const targetDistance = 500;
-export const METRES_PER_KILOMETRE = 1000;
 
-export interface ChartProps {
-  data: any[];
-  targetDistance: number;
-  title: string;
-}
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+  }
+`;
+
+const StyledApp = styled.div`
+  align-items: center;
+  background-color: #1c3d5a;
+  color: white;
+  display: flex;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  justify-content: center;
+  min-height: 100vh;
+`;
 
 const App = () => (
-  <div className="bg-black text-white font-sans min-h-screen flex items-center justify-center">
+  <StyledApp>
+    <GlobalStyle />
     <DataFetcher>
       {({ data, loading, error }) => {
         if (error) {
@@ -34,7 +47,7 @@ const App = () => (
         );
       }}
     </DataFetcher>
-  </div>
+  </StyledApp>
 );
 
 export default App;

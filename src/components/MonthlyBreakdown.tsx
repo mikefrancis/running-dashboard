@@ -5,15 +5,13 @@ import {
   Line,
   CartesianGrid,
   XAxis,
-  YAxis,
-  Bar,
-  BarChart,
   Tooltip,
-  Legend,
   ResponsiveContainer
 } from "recharts";
-import { ChartProps, METRES_PER_KILOMETRE } from "./App";
+
+import { ChartProps, METRES_PER_KILOMETRE } from "./../types";
 import Metric from "./Metric";
+import theme from "../theme";
 
 const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
   data,
@@ -32,20 +30,33 @@ const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
   });
 
   const chartData = monthData.map((month, index) => ({
-    name: months[index][0],
-    actual: Math.round(month),
+    name: months[index],
+    actual: month > 0 ? Math.round(month) : null,
     projected: Math.round(projected)
   }));
+
+  const lineProps = {
+    unit: "km"
+  };
 
   return (
     <Metric title={title}>
       <ResponsiveContainer width={600} height={300}>
         <LineChart data={chartData}>
-          <Line dataKey="actual" />
-          <Line dataKey="projected" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
+          <Line
+            {...lineProps}
+            dataKey="actual"
+            name="Actual"
+            stroke={theme.colours.secondary}
+          />
+          <Line
+            {...lineProps}
+            dataKey="projected"
+            name="Projected"
+            stroke={theme.colours.primary}
+          />
+          <XAxis dataKey="name" tickFormatter={tick => tick[0]} />
+          <CartesianGrid strokeDasharray="2 2" stroke="#DAE1E7" />
           <Tooltip />
         </LineChart>
       </ResponsiveContainer>

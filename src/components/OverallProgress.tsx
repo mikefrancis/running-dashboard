@@ -1,7 +1,32 @@
 import * as React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { ChartProps, METRES_PER_KILOMETRE } from "./App";
+import styled from "styled-components";
+
+import { ChartProps, METRES_PER_KILOMETRE } from "./../types";
 import Metric from "./Metric";
+import theme from "../theme";
+
+const StyledChart = styled.div`
+  position: relative;
+`;
+
+const BigNumberContainer = styled.div`
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 0.05rem;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 0;
+`;
+
+const BigNumber = styled.span`
+  font-size: 5rem;
+`;
 
 const OverallProgress: React.FunctionComponent<ChartProps> = ({
   data,
@@ -26,11 +51,11 @@ const OverallProgress: React.FunctionComponent<ChartProps> = ({
   ];
   return (
     <Metric title={title}>
-      <div className="relative">
-        <div className="absolute pin flex flex-col items-center justify-center">
-          <span className="text-5xl">{Math.round(totalDistance)}</span>
-          <span className="uppercase text-sm tracking-wide">KM</span>
-        </div>
+      <StyledChart>
+        <BigNumberContainer>
+          <BigNumber>{Math.round(totalDistance)}</BigNumber>
+          km
+        </BigNumberContainer>
         <ResponsiveContainer width={300} height={300}>
           <PieChart>
             <Pie
@@ -39,13 +64,13 @@ const OverallProgress: React.FunctionComponent<ChartProps> = ({
               data={chartData}
               innerRadius="60%"
               outerRadius="80%"
-              fill="#DAE1E7"
+              fill={theme.colours.primary}
             >
-              <Cell fill="#3490DC" />
+              <Cell fill={theme.colours.secondary} />
             </Pie>
           </PieChart>
         </ResponsiveContainer>
-      </div>
+      </StyledChart>
     </Metric>
   );
 };

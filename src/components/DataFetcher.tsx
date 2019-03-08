@@ -1,6 +1,5 @@
 import * as React from "react";
 import axios from "axios";
-import moment from "moment";
 
 interface State {
   data: any[];
