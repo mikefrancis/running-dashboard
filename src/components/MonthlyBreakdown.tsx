@@ -1,5 +1,5 @@
 import * as React from "react";
-import moment from "moment";
+import { parse, format } from "date-fns";
 import {
   LineChart,
   Line,
@@ -13,24 +13,38 @@ import { ChartProps, METRES_PER_KILOMETRE } from "./../types";
 import Metric from "./Metric";
 import theme from "../theme";
 
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+
 const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
   data,
   targetDistance,
   title
 }) => {
-  const months = moment.months();
-  const monthData = new Array(months.length).fill(0);
-  const projected = targetDistance / months.length;
+  const monthData = new Array(MONTHS.length).fill(0);
+  const projected = targetDistance / MONTHS.length;
 
   data.forEach(activity => {
-    const month = parseInt(moment(activity.start_date).format("M"), 10) - 1;
+    const month = parseInt(format(parse(activity.start_date), "M"), 10) - 1;
 
     monthData[month] =
       monthData[month] + activity.distance / METRES_PER_KILOMETRE;
   });
 
   const chartData = monthData.map((month, index) => ({
-    name: months[index],
+    name: MONTHS[index],
     actual: month > 0 ? Math.round(month) : null,
     projected: Math.round(projected)
   }));
@@ -41,7 +55,7 @@ const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
 
   return (
     <Metric title={title}>
-      <ResponsiveContainer width={600} height={300}>
+      <ResponsiveContainer height={300}>
         <LineChart data={chartData}>
           <Line
             {...lineProps}

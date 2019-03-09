@@ -12,6 +12,7 @@ const StyledMetric = styled.section`
   color: #111;
   margin: 1rem;
   padding: 1rem 2rem;
+  width: 50%;
 
   h2 {
     font-size: 0.75rem;

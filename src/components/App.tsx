@@ -8,6 +8,10 @@ import OverallProgress from "./OverallProgress";
 const targetDistance = 500;
 
 const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
   }
@@ -22,6 +26,7 @@ const StyledApp = styled.div`
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   justify-content: center;
   min-height: 100vh;
+  padding: 1rem;
 `;
 
 const App = () => (

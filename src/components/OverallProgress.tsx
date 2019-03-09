@@ -25,7 +25,7 @@ const BigNumberContainer = styled.div`
 `;
 
 const BigNumber = styled.span`
-  font-size: 5rem;
+  font-size: 4rem;
 `;
 
 const OverallProgress: React.FunctionComponent<ChartProps> = ({
@@ -56,7 +56,7 @@ const OverallProgress: React.FunctionComponent<ChartProps> = ({
           <BigNumber>{Math.round(totalDistance)}</BigNumber>
           km
         </BigNumberContainer>
-        <ResponsiveContainer width={300} height={300}>
+        <ResponsiveContainer height={300}>
           <PieChart>
             <Pie
               activeIndex={0}
