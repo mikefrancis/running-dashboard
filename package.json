@@ -29,9 +29,9 @@
     "@types/react-dom": "16.8.2",
     "@types/recharts": "^1.1.13",
     "@types/styled-components": "^4.1.12",
+    "axios": "^0.18.0",
     "date-fns": "^1.30.1",
     "dotenv": "^6.2.0",
-    "node-fetch": "^2.3.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-scripts": "2.1.5",
@@ -42,6 +42,7 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.3.3",
     "@types/aws-lambda": "^8.10.20",
+    "@types/axios": "^0.14.0",
     "babel-loader": "^8.0.5",
     "http-proxy-middleware": "^0.19.1",
     "netlify-lambda": "^1.4.2",
