@@ -59,6 +59,7 @@ const OverallProgress: React.FunctionComponent<ChartProps> = ({
         <ResponsiveContainer height={300}>
           <PieChart>
             <Pie
+              startAngle={0}
               activeIndex={0}
               dataKey="value"
               data={chartData}
