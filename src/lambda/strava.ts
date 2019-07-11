@@ -35,8 +35,6 @@ const handler = async (
       body: JSON.stringify(response.data)
     });
   } catch (error) {
-    console.log(error);
-
     callback(null, {
       statusCode: 401,
       body: JSON.stringify({
