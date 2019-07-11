@@ -3,3 +3,10 @@ language: node_js
 node_js:
   - "node"
   - "lts/*"
+
+install:
+  - yarn global add codecov
+
+script:
+  - yarn test
+  - codecov
