@@ -8,5 +8,5 @@ install:
   - yarn global add codecov
 
 script:
-  - yarn test
+  - yarn test --coverage --watchAll=false
   - codecov

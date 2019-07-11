@@ -55,7 +55,6 @@
     "typescript": "3.3.3333"
   },
   "jest": {
-    "coverageDirectory": "./coverage/",
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!**/node_modules/**"
