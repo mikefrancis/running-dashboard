@@ -53,5 +53,11 @@
     "react-scripts": "3.0.0",
     "react-testing-library": "^6.0.0",
     "typescript": "3.3.3333"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!**/node_modules/**"
+    ]
   }
 }

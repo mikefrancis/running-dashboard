@@ -3,8 +3,8 @@ import axiosMock from "axios";
 import { render, cleanup, waitForDomChange } from "react-testing-library";
 import { ThemeProvider } from "styled-components";
 
-import App from "../App";
-import theme from "../../theme";
+import App from "./App";
+import theme from "../theme";
 
 jest.mock("axios");
 
