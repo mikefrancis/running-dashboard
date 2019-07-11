@@ -1,26 +1,71 @@
 import * as React from "react";
-import { render, cleanup, waitForElement } from "react-testing-library";
 import axiosMock from "axios";
+import { render, cleanup, waitForDomChange } from "react-testing-library";
+import { ThemeProvider } from "styled-components";
+
 import App from "../App";
+import theme from "../../theme";
 
 jest.mock("axios");
 
 describe("DataFetcher", () => {
-  afterEach(cleanup);
+  afterEach(() => {
+    cleanup();
+    jest.resetAllMocks();
+  });
 
-  it("should render its children", () => {
-    axiosMock.get.mockResolvedValueOnce({
-      data: [
-        {
-          start_date: "2019-01-01 00:00:00",
-          distance: 10000
-        }
-      ]
-    });
+  it("should render loading when mounted", async () => {
+    const { getByTestId } = render(
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    );
 
-    const { container } = render(<App />);
+    expect(getByTestId("loading"));
+  });
+
+  it("should render an error", async () => {
+    axiosMock.get = jest.fn(() =>
+      Promise.reject({
+        message: "oh noes"
+      })
+    );
+
+    const { getByTestId } = render(
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    );
+
+    await waitForDomChange();
 
     expect(axiosMock.get).toHaveBeenCalledTimes(1);
-    expect(container.firstChild).toMatchSnapshot();
+    expect(getByTestId("error"));
+  });
+
+  it("should render the data", async () => {
+    axiosMock.get = jest.fn(
+      () =>
+        Promise.resolve({
+          data: [
+            {
+              start_date: "2019-01-01 00:00:00",
+              distance: 10000
+            }
+          ]
+        }) as any
+    );
+
+    const { getByTestId } = render(
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    );
+
+    await waitForDomChange();
+
+    expect(axiosMock.get).toHaveBeenCalledTimes(1);
+    expect(getByTestId("Breakdown"));
+    expect(getByTestId("Progress"));
   });
 });

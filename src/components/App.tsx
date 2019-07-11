@@ -38,11 +38,11 @@ const App = () => (
     <DataFetcher>
       {({ data, loading, error }) => {
         if (error) {
-          return <span>{error.message}</span>;
+          return <span data-testid="error">{error.message}</span>;
         }
 
         if (loading) {
-          return <span>Loading...</span>;
+          return <span data-testid="loading">Loading...</span>;
         }
 
         const chartProps = { data, targetDistance };
