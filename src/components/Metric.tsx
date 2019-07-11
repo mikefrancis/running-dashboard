@@ -27,7 +27,7 @@ const StyledMetric = styled.section`
 
 const Metric: React.FunctionComponent<Props> = ({ children, title }) => (
   <StyledMetric>
-    <h2>{title}</h2>
+    <h2 data-testid={title}>{title}</h2>
     {children}
   </StyledMetric>
 );
