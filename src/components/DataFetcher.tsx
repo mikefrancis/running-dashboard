@@ -18,15 +18,21 @@ class DataFetcher extends React.Component<Props, State> {
     this.state = {
       data: [],
       loading: false,
-      error: null
+      error: null,
     };
   }
 
   async componentDidMount() {
     this.setState({ loading: true });
 
+    var urlParams = new URLSearchParams(window.location.search);
+
     try {
-      const response = await axios.get("/.netlify/functions/strava");
+      const response = await axios.get("/.netlify/functions/strava", {
+        params: {
+          year: urlParams.get("year") || new Date().getFullYear(),
+        },
+      });
 
       this.setState({ data: response.data, error: null, loading: false });
     } catch (error) {

@@ -62,6 +62,7 @@ const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
             dataKey="actual"
             name="Actual"
             stroke={theme.colours.secondary}
+            type="monotone"
           />
           <Line
             {...lineProps}

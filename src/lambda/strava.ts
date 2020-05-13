@@ -14,32 +14,33 @@ const handler = async (
       client_id: process.env.REACT_APP_STRAVA_KEY,
       client_secret: process.env.REACT_APP_STRAVA_SECRET,
       refresh_token: process.env.REACT_APP_STRAVA_REFRESH_TOKEN,
-      grant_type: "refresh_token"
+      grant_type: "refresh_token",
     });
 
     const accessToken = authData.data.access_token;
 
-    const startOfYear =
-      new Date(`${new Date().getFullYear()}-01-01`).getTime() / 1000;
+    const year = event.queryStringParameters.year || new Date().getFullYear();
+
+    const startOfYear = new Date(`${year}-01-01`).getTime() / 1000;
     const response = await axios.get(
       `https://www.strava.com/api/v3/athlete/activities?after=${startOfYear}`,
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
     );
 
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(response.data)
+      body: JSON.stringify(response.data),
     });
   } catch (error) {
     callback(null, {
       statusCode: 401,
       body: JSON.stringify({
-        error: error.message
-      })
+        error: error.message,
+      }),
     });
   }
 };
