@@ -25,7 +25,7 @@ class DataFetcher extends React.Component<Props, State> {
   async componentDidMount() {
     this.setState({ loading: true });
 
-    var urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search);
 
     try {
       const response = await axios.get("/.netlify/functions/strava", {

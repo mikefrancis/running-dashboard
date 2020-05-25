@@ -13,6 +13,8 @@ import { ChartProps, METRES_PER_KILOMETRE } from "./../types";
 import Metric from "./Metric";
 import theme from "../theme";
 
+const today = new Date();
+
 const MONTHS = [
   "January",
   "February",
@@ -43,11 +45,16 @@ const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
       monthData[month] + activity.distance / METRES_PER_KILOMETRE;
   });
 
-  const chartData = monthData.map((month, index) => ({
-    name: MONTHS[index],
-    actual: month > 0 ? Math.round(month) : 0,
-    projected: Math.round(projected),
-  }));
+  const chartData = monthData.map((month, index) => {
+    const actual =
+      month > 0 ? Math.round(month) : today.getMonth() >= index ? 0 : null;
+
+    return {
+      actual,
+      name: MONTHS[index],
+      projected: Math.round(projected),
+    };
+  });
 
   const lineProps = {
     unit: "km",
