@@ -6,12 +6,14 @@ import {
   CartesianGrid,
   XAxis,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
 
 import { ChartProps, METRES_PER_KILOMETRE } from "./../types";
 import Metric from "./Metric";
 import theme from "../theme";
+
+const today = new Date();
 
 const MONTHS = [
   "January",
@@ -25,32 +27,37 @@ const MONTHS = [
   "September",
   "October",
   "November",
-  "December"
+  "December",
 ];
 
 const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
   data,
   targetDistance,
-  title
+  title,
 }) => {
   const monthData = new Array(MONTHS.length).fill(0);
   const projected = targetDistance / MONTHS.length;
 
-  data.forEach(activity => {
+  data.forEach((activity) => {
     const month = parseInt(format(parse(activity.start_date), "M"), 10) - 1;
 
     monthData[month] =
       monthData[month] + activity.distance / METRES_PER_KILOMETRE;
   });
 
-  const chartData = monthData.map((month, index) => ({
-    name: MONTHS[index],
-    actual: month > 0 ? Math.round(month) : null,
-    projected: Math.round(projected)
-  }));
+  const chartData = monthData.map((month, index) => {
+    const actual =
+      month > 0 ? Math.round(month) : today.getMonth() >= index ? 0 : null;
+
+    return {
+      actual,
+      name: MONTHS[index],
+      projected: Math.round(projected),
+    };
+  });
 
   const lineProps = {
-    unit: "km"
+    unit: "km",
   };
 
   return (
@@ -62,6 +69,7 @@ const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
             dataKey="actual"
             name="Actual"
             stroke={theme.colours.secondary}
+            type="monotone"
           />
           <Line
             {...lineProps}
@@ -69,7 +77,7 @@ const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
             name="Projected"
             stroke={theme.colours.primary}
           />
-          <XAxis dataKey="name" tickFormatter={tick => tick[0]} />
+          <XAxis dataKey="name" tickFormatter={(tick) => tick[0]} />
           <CartesianGrid strokeDasharray="2 2" stroke="#DAE1E7" />
           <Tooltip />
         </LineChart>
