@@ -22,7 +22,7 @@ const handler = async (
     const startOfYear =
       new Date(`${new Date().getFullYear()}-01-01`).getTime() / 1000;
     const response = await axios.get(
-      `https://www.strava.com/api/v3/athlete/activities?after=${startOfYear}`,
+      `https://www.strava.com/api/v3/athlete/activities?after=${startOfYear}&per_page=200`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`
