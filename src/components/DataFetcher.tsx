@@ -1,5 +1,5 @@
-import * as React from "react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 interface State {
   data: any[];
@@ -11,40 +11,34 @@ interface Props {
   children(props: State): JSX.Element;
 }
 
-class DataFetcher extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+const DataFetcher: React.FC<Props> = ({ children }) => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(undefined);
 
-    this.state = {
-      data: [],
-      loading: false,
-      error: null,
-    };
-  }
-
-  async componentDidMount() {
-    this.setState({ loading: true });
+  useEffect(() => {
+    setLoading(true);
 
     const urlParams = new URLSearchParams(window.location.search);
 
-    try {
-      const response = await axios.get("/.netlify/functions/strava", {
+    axios
+      .get('/api/strava', {
         params: {
-          year: urlParams.get("year") || new Date().getFullYear(),
+          year: urlParams.get('year') || new Date().getFullYear(),
         },
+      })
+      .then((response) => {
+        setData(response.data);
+        setError(undefined);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
       });
+  }, [setData, setLoading, setError]);
 
-      this.setState({ data: response.data, error: null, loading: false });
-    } catch (error) {
-      this.setState({ error, loading: false });
-    }
-  }
-
-  render() {
-    const { data, loading, error } = this.state;
-
-    return this.props.children({ data, loading, error });
-  }
-}
+  return children({ data, loading, error });
+};
 
 export default DataFetcher;

@@ -8,5 +8,3 @@ export interface ChartProps {
   targetDistance: number;
   title: string;
 }
-
-export const METRES_PER_KILOMETRE = 1000;

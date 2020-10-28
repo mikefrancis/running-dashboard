@@ -1,5 +1,5 @@
-import * as React from "react";
-import styled from "styled-components";
+import * as React from 'react';
+import styled from 'styled-components';
 
 interface Props {
   children?: React.ReactNode;
@@ -20,7 +20,7 @@ const StyledMetric = styled.section`
     text-transform: uppercase;
   }
 
-  @media (min-width: ${props => props.theme.width.sm}) {
+  @media (min-width: ${(props) => props.theme.width.sm}) {
     width: 50%;
   }
 `;

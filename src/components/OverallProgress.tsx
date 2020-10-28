@@ -1,10 +1,11 @@
-import * as React from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import styled from "styled-components";
+import * as React from 'react';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import styled from 'styled-components';
 
-import { ChartProps, METRES_PER_KILOMETRE } from "./../types";
-import Metric from "./Metric";
-import theme from "../theme";
+import { ChartProps } from './../types';
+import Metric from './Metric';
+import theme from '../theme';
+import { METRES_PER_KILOMETRE } from '../constants';
 
 const StyledChart = styled.div`
   position: relative;
@@ -31,7 +32,7 @@ const BigNumber = styled.span`
 const OverallProgress: React.FunctionComponent<ChartProps> = ({
   data,
   targetDistance,
-  title
+  title,
 }) => {
   const totalDistance =
     data.reduce(
@@ -41,13 +42,13 @@ const OverallProgress: React.FunctionComponent<ChartProps> = ({
 
   const chartData = [
     {
-      name: "Total distance",
-      value: totalDistance
+      name: 'Total distance',
+      value: totalDistance,
     },
     {
-      name: "Target distance",
-      value: targetDistance - totalDistance
-    }
+      name: 'Target distance',
+      value: targetDistance - totalDistance,
+    },
   ];
   return (
     <Metric title={title}>

@@ -1,33 +1,33 @@
-import * as React from "react";
-import axiosMock from "axios";
-import { render, cleanup, waitForDomChange } from "react-testing-library";
-import { ThemeProvider } from "styled-components";
+import React from 'react';
+import axiosMock from 'axios';
+import { render, cleanup, waitFor } from '@testing-library/react';
+import { ThemeProvider } from 'styled-components';
 
-import App from "./App";
-import theme from "../theme";
+import App from './App';
+import theme from '../theme';
 
-jest.mock("axios");
+jest.mock('axios');
 
-describe("DataFetcher", () => {
+describe('DataFetcher', () => {
   afterEach(() => {
     cleanup();
     jest.resetAllMocks();
   });
 
-  it("should render loading when mounted", async () => {
+  it('should render loading when mounted', async () => {
     const { getByTestId } = render(
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>
     );
 
-    expect(getByTestId("loading"));
+    expect(getByTestId('loading'));
   });
 
-  it("should render an error", async () => {
+  it('should render an error', async () => {
     axiosMock.get = jest.fn(() =>
       Promise.reject({
-        message: "oh noes"
+        message: 'oh noes',
       })
     );
 
@@ -37,22 +37,22 @@ describe("DataFetcher", () => {
       </ThemeProvider>
     );
 
-    await waitForDomChange();
-
-    expect(axiosMock.get).toHaveBeenCalledTimes(1);
-    expect(getByTestId("error"));
+    await waitFor(() => {
+      expect(axiosMock.get).toHaveBeenCalledTimes(1);
+      expect(getByTestId('error'));
+    });
   });
 
-  it("should render the data", async () => {
+  it('should render the data', async () => {
     axiosMock.get = jest.fn(
       () =>
         Promise.resolve({
           data: [
             {
-              start_date: "2019-01-01 00:00:00",
-              distance: 10000
-            }
-          ]
+              start_date: '2019-01-01 00:00:00',
+              distance: 10000,
+            },
+          ],
         }) as any
     );
 
@@ -62,10 +62,10 @@ describe("DataFetcher", () => {
       </ThemeProvider>
     );
 
-    await waitForDomChange();
-
-    expect(axiosMock.get).toHaveBeenCalledTimes(1);
-    expect(getByTestId("Breakdown"));
-    expect(getByTestId("Progress"));
+    await waitFor(() => {
+      expect(axiosMock.get).toHaveBeenCalledTimes(1);
+      expect(getByTestId('Breakdown'));
+      expect(getByTestId('Progress'));
+    });
   });
 });
