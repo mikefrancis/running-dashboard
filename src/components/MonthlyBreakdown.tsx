@@ -1,5 +1,5 @@
-import * as React from "react";
-import { parse, format } from "date-fns";
+import * as React from 'react';
+import { parse, format } from 'date-fns';
 import {
   LineChart,
   Line,
@@ -7,27 +7,28 @@ import {
   XAxis,
   Tooltip,
   ResponsiveContainer,
-} from "recharts";
+} from 'recharts';
 
-import { ChartProps, METRES_PER_KILOMETRE } from "./../types";
-import Metric from "./Metric";
-import theme from "../theme";
+import { ChartProps } from './../types';
+import Metric from './Metric';
+import theme from '../theme';
+import { METRES_PER_KILOMETRE } from '../constants';
 
 const today = new Date();
 
 const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
@@ -39,7 +40,7 @@ const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
   const projected = targetDistance / MONTHS.length;
 
   data.forEach((activity) => {
-    const month = parseInt(format(parse(activity.start_date), "M"), 10) - 1;
+    const month = parseInt(format(parse(activity.start_date), 'M'), 10) - 1;
 
     monthData[month] =
       monthData[month] + activity.distance / METRES_PER_KILOMETRE;
@@ -57,7 +58,7 @@ const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
   });
 
   const lineProps = {
-    unit: "km",
+    unit: 'km',
   };
 
   return (
