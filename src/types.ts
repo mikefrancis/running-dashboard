@@ -1,4 +1,4 @@
-interface Activity {
+export interface Activity {
   distance: number;
   start_date: string;
 }

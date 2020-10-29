@@ -1,61 +1,54 @@
-import * as React from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-import DataFetcher from './DataFetcher';
 import MonthlyBreakdown from './MonthlyBreakdown';
 import OverallProgress from './OverallProgress';
 
 const targetDistance = 500;
 
-const GlobalStyle = createGlobalStyle`
-  * {
-    box-sizing: border-box;
+const App = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(undefined);
+
+  useEffect(() => {
+    setLoading(true);
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    axios
+      .get('/api/strava', {
+        params: {
+          year: urlParams.get('year') || new Date().getFullYear(),
+        },
+      })
+      .then((response) => {
+        setData(response.data);
+        setError(undefined);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, [setData, setLoading, setError]);
+
+  if (error) {
+    return <span data-testid="error">{error.message}</span>;
   }
 
-  body {
-    margin: 0;
+  if (loading) {
+    return <span data-testid="loading">Loading...</span>;
   }
-`;
 
-const StyledApp = styled.div`
-  background-color: #1c3d5a;
-  color: white;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 1rem;
+  const chartProps = { data, targetDistance };
 
-  @media (min-width: ${(props) => props.theme.width.sm}) {
-    align-items: center;
-    display: flex;
-  }
-`;
-
-const App = () => (
-  <StyledApp>
-    <GlobalStyle />
-    <DataFetcher>
-      {({ data, loading, error }) => {
-        if (error) {
-          return <span data-testid="error">{error.message}</span>;
-        }
-
-        if (loading) {
-          return <span data-testid="loading">Loading...</span>;
-        }
-
-        const chartProps = { data, targetDistance };
-
-        return (
-          <>
-            <MonthlyBreakdown {...chartProps} title="Breakdown" />
-            <OverallProgress {...chartProps} title="Progress" />
-          </>
-        );
-      }}
-    </DataFetcher>
-  </StyledApp>
-);
+  return (
+    <>
+      <MonthlyBreakdown {...chartProps} title="Breakdown" />
+      <OverallProgress {...chartProps} title="Progress" />
+    </>
+  );
+};
 
 export default App;
