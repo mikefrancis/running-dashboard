@@ -1,19 +1,13 @@
 import React from 'react';
-import axiosMock from 'axios';
-import { render, cleanup, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 
 import App from './App';
 import theme from '../theme';
 
-jest.mock('axios');
-
-describe('DataFetcher', () => {
-  afterEach(() => {
-    cleanup();
-    jest.resetAllMocks();
-  });
-
+describe('App', () => {
   it('should render loading when mounted', async () => {
     const { getByTestId } = render(
       <ThemeProvider theme={theme}>
@@ -25,11 +19,17 @@ describe('DataFetcher', () => {
   });
 
   it('should render an error', async () => {
-    axiosMock.get = jest.fn(() =>
-      Promise.reject({
-        message: 'oh noes',
-      })
+    const server = setupServer(
+      rest.get('/api/strava', (_, res, ctx) =>
+        res(
+          ctx.status(500),
+          ctx.json({
+            message: 'Uh ohez',
+          })
+        )
+      )
     );
+    server.listen();
 
     const { getByTestId } = render(
       <ThemeProvider theme={theme}>
@@ -38,23 +38,25 @@ describe('DataFetcher', () => {
     );
 
     await waitFor(() => {
-      expect(axiosMock.get).toHaveBeenCalledTimes(1);
       expect(getByTestId('error'));
     });
+
+    server.close();
   });
 
   it('should render the data', async () => {
-    axiosMock.get = jest.fn(
-      () =>
-        Promise.resolve({
-          data: [
+    const server = setupServer(
+      rest.get('/api/strava', (_, res, ctx) =>
+        res(
+          ctx.json([
             {
-              start_date: '2019-01-01 00:00:00',
-              distance: 10000,
+              distance: 5000,
             },
-          ],
-        }) as any
+          ])
+        )
+      )
     );
+    server.listen();
 
     const { getByTestId } = render(
       <ThemeProvider theme={theme}>
@@ -63,9 +65,10 @@ describe('DataFetcher', () => {
     );
 
     await waitFor(() => {
-      expect(axiosMock.get).toHaveBeenCalledTimes(1);
       expect(getByTestId('Breakdown'));
       expect(getByTestId('Progress'));
     });
+
+    server.close();
   });
 });
