@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { parse } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 import { TARGET_DISTANCE } from '../constants';
 import { Activity } from '../types';
@@ -19,6 +19,7 @@ const App = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(undefined);
+  const router = useRouter();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -26,7 +27,7 @@ const App = () => {
     if (urlParams.has('year')) {
       setYear(Number(urlParams.get('year')));
     }
-  }, [setYear]);
+  }, [setYear, year]);
 
   useEffect(() => {
     setLoading(true);
@@ -38,15 +39,7 @@ const App = () => {
         },
       })
       .then((response) => {
-        const data = response.data.filter((activity) => {
-          if (parse(activity.start_date).getFullYear() === year) {
-            return true;
-          }
-
-          return false;
-        });
-
-        setData(data);
+        setData(response.data);
         setError(undefined);
         setLoading(false);
       })
@@ -64,14 +57,20 @@ const App = () => {
     return <span data-testid="loading">Loading...</span>;
   }
 
-  const chartProps = { data, year, targetDistance: TARGET_DISTANCE };
+  const handleYearSelect = (year: number) => {
+    setYear(year);
+    router.push(`/?year=${year}`, undefined, {
+      shallow: true,
+    });
+  };
+  const chartProps = { data, targetDistance: TARGET_DISTANCE };
 
   return (
     <>
       <YearSelect
         name="year"
         id="year"
-        onChange={(event) => setYear(Number(event.target.value))}
+        onChange={(event) => handleYearSelect(Number(event.target.value))}
         value={year}
       >
         <option>2020</option>
