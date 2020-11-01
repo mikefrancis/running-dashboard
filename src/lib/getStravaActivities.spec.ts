@@ -1,13 +1,9 @@
-import { getStravaActivities } from './getStravaActivities';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
-describe('strava lambda', () => {
-  const requestMock = {} as any;
-  const responseMock = {
-    status: jest.fn(),
-    send: jest.fn(),
-  } as any;
+import { getStravaActivities } from './getStravaActivities';
+
+describe('getStravaActivities', () => {
   const startOfYear =
     new Date(`${new Date().getFullYear()}-01-01`).getTime() / 1000;
 
@@ -34,14 +30,9 @@ describe('strava lambda', () => {
     );
     server.listen();
 
-    await getStravaActivities(requestMock, responseMock);
+    const response = await getStravaActivities(new Date().getFullYear());
 
-    expect(responseMock.status).toBeCalledWith(200);
-    expect(responseMock.send).toBeCalledWith([
-      {
-        distance: 5000,
-      },
-    ]);
+    expect(response[0].distance).toBe(5000);
 
     server.close();
   });
@@ -59,12 +50,12 @@ describe('strava lambda', () => {
     );
     server.listen();
 
-    await getStravaActivities(requestMock, responseMock);
+    try {
+      await getStravaActivities(new Date().getFullYear());
+    } catch (error) {
+      expect(error.message).toBe('Request failed with status code 400');
+    }
 
-    expect(responseMock.status).toBeCalledWith(401);
-    expect(responseMock.send).toBeCalledWith({
-      error: 'Request failed with status code 400',
-    });
     server.close();
   });
 });
