@@ -50,6 +50,7 @@ const OverallProgress: React.FunctionComponent<ChartProps> = ({
       value: targetDistance - totalDistance,
     },
   ];
+
   return (
     <Metric title={title}>
       <StyledChart>
