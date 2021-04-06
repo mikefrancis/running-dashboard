@@ -5,6 +5,4 @@ export interface Activity {
 
 export interface ChartProps {
   data: Activity[];
-  targetDistance: number;
-  title: string;
 }

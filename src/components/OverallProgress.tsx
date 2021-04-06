@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { ChartProps } from './../types';
 import Metric from './Metric';
 import theme from '../theme';
-import { METRES_PER_KILOMETRE } from '../constants';
+import { METRES_PER_KILOMETRE, TARGET_DISTANCE } from '../constants';
 
 const StyledChart = styled.div`
   position: relative;
@@ -29,11 +29,7 @@ const BigNumber = styled.span`
   font-size: 4rem;
 `;
 
-const OverallProgress: React.FunctionComponent<ChartProps> = ({
-  data,
-  targetDistance,
-  title,
-}) => {
+const OverallProgress: React.FunctionComponent<ChartProps> = ({ data }) => {
   const totalDistance =
     data.reduce(
       (previousValue, activity) => previousValue + activity.distance,
@@ -47,12 +43,12 @@ const OverallProgress: React.FunctionComponent<ChartProps> = ({
     },
     {
       name: 'Target distance',
-      value: targetDistance - totalDistance,
+      value: TARGET_DISTANCE - totalDistance,
     },
   ];
 
   return (
-    <Metric title={title}>
+    <Metric title="Progress">
       <StyledChart>
         <BigNumberContainer>
           <BigNumber>{Math.round(totalDistance)}</BigNumber>
