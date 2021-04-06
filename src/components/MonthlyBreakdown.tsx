@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { parse, format } from 'date-fns';
+import dayjs from 'dayjs';
 import {
   LineChart,
   Line,
@@ -12,7 +12,7 @@ import {
 import { ChartProps } from './../types';
 import Metric from './Metric';
 import theme from '../theme';
-import { METRES_PER_KILOMETRE } from '../constants';
+import { METRES_PER_KILOMETRE, TARGET_DISTANCE } from '../constants';
 
 const today = new Date();
 
@@ -31,16 +31,12 @@ const MONTHS = [
   'December',
 ];
 
-const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
-  data,
-  targetDistance,
-  title,
-}) => {
+const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({ data }) => {
   const monthData = new Array(MONTHS.length).fill(0);
-  const projected = targetDistance / MONTHS.length;
+  const projected = TARGET_DISTANCE / MONTHS.length;
 
   data.forEach((activity) => {
-    const month = parseInt(format(parse(activity.start_date), 'M'), 10) - 1;
+    const month = dayjs(activity.start_date).month();
 
     monthData[month] =
       monthData[month] + activity.distance / METRES_PER_KILOMETRE;
@@ -62,7 +58,7 @@ const MonthlyBreakdown: React.FunctionComponent<ChartProps> = ({
   };
 
   return (
-    <Metric title={title}>
+    <Metric title="Breakdown">
       <ResponsiveContainer height={300}>
         <LineChart data={chartData}>
           <Line
