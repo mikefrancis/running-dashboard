@@ -1,4 +1,4 @@
-import { AppPropsType } from 'next/dist/next-server/lib/utils';
+import { AppPropsType } from 'next/dist/shared/lib/utils';
 import React from 'react';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 
