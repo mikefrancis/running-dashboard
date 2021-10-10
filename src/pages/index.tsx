@@ -1,5 +1,7 @@
-import App from '../components/App';
+import dynamic from 'next/dynamic';
 
-const Page = () => <App />;
+const DynamicComponentWithNoSSR = dynamic(() => import('../components/App'), {
+  ssr: false,
+});
 
-export default Page;
+export default DynamicComponentWithNoSSR;
